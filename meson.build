@@ -1,5 +1,5 @@
 project('space_tycoon_terminal', 'cpp')
-src = ['Main.cpp']
+src = ['src/Main.cpp']
 
 space_tycoon_model_dep = dependency('space_tycoon_model', fallback : ['space_tycoon_model', 'space_tycoon_model_dep'])
 
