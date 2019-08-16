@@ -1,7 +1,7 @@
-#include <iostream>
+#include <SpaceTycoonModel.h>
 
 int main(int argc, char** argv)
 {
-	std::cout << "Hello world";
+	Do();
 	return 0;
 }
