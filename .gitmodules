@@ -1,0 +1,3 @@
+[submodule "subprojects/space_tycoon_model"]
+	path = subprojects/space_tycoon_model
+	url = https://github.com/barsnadcat/space_tycoon_model.git
