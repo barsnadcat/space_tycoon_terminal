@@ -7,6 +7,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <iostream>
+#include <easylogging++.h>
+
+INITIALIZE_EASYLOGGINGPP
 
 const char* kRunCommand = "run";
 const char* kCommands[] = 
@@ -48,7 +51,7 @@ void ExecuteRunCommand(const char* buffer)
 	int param = 0;
 	if (sscanf(buffer, "%*s %d", &param) < 1)
 	{
-		std::cout << "Failed to parse parameters of run command" << std::endl;
+		LOG(ERROR) << "Failed to parse parameters of run command";
 	}
 	else
 	{
@@ -64,13 +67,14 @@ void ExecuteCommand(const char* buffer)
 	}
 	else
 	{
-		std::cout << "Unknown command" << std::endl;
+		LOG(ERROR) << "Unknown command";
 	}
 }
 
 
 int main(int argc, char** argv)
 {
+	START_EASYLOGGINGPP(argc, argv);
 
 	rl_attempted_completion_function = CommandNameCompletion;
 
@@ -88,3 +92,5 @@ int main(int argc, char** argv)
 
 	return 0;
 }
+
+#include <easylogging++.cc>
