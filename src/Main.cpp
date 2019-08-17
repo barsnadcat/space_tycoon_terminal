@@ -8,10 +8,10 @@
 #include <readline/history.h>
 #include <iostream>
 
-const char* kRunCmd = "run";
+const char* kRunCommand = "run";
 const char* kCommands[] = 
 {
-	kRunCmd,
+	kRunCommand,
 	nullptr
 };
 
@@ -39,19 +39,32 @@ char* CommandNameGenerator(const char* text, int state)
 
 char** CommandNameCompletion(const char* text, int start, int end)
 {
-	rl_attempted_completion_over = 1;
+	rl_attempted_completion_over = 1; // Disable fallback to file name auto complete
 	return rl_completion_matches(text, CommandNameGenerator);
+}
+
+void ExecuteRunCommand(const char* buffer)
+{
+	int param = 0;
+	if (sscanf(buffer, "%*s %d", &param) < 1)
+	{
+		std::cout << "Failed to parse parameters of run command" << std::endl;
+	}
+	else
+	{
+		Do(param);
+	}
 }
 
 void ExecuteCommand(const char* buffer)
 {
-	if (strncmp(buffer, kRunCmd, strlen(kRunCmd)) == 0)
+	if (strncmp(buffer, kRunCommand, strlen(kRunCommand)) == 0)
 	{
-		Do();
+		ExecuteRunCommand(buffer);
 	}
 	else
 	{
-		std::cout << "Unknown command " << buffer;
+		std::cout << "Unknown command" << std::endl;
 	}
 }
 
