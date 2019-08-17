@@ -6,11 +6,12 @@
 #include <string>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <iostream>
 
-
-const char *gCommandNames[] = 
+const char* kRunCmd = "run";
+const char* kCommands[] = 
 {
-	"run",
+	kRunCmd,
 	nullptr
 };
 
@@ -19,13 +20,16 @@ char* CommandNameGenerator(const char* text, int state)
 	static int listIndex, len;
 	const char* name;
 
-	if (!state) {
+	if (!state) 
+	{
 		listIndex = 0;
 		len = strlen(text);
 	}
 
-	while ((name = gCommandNames[listIndex++])) {
-		if (strncmp(name, text, len) == 0) {
+	while ((name = kCommands[listIndex++]))
+	{
+		if (strncmp(name, text, len) == 0) 
+		{
 			return strdup(name);
 		}
 	}
@@ -39,24 +43,34 @@ char** CommandNameCompletion(const char* text, int start, int end)
 	return rl_completion_matches(text, CommandNameGenerator);
 }
 
+void ExecuteCommand(const char* buffer)
+{
+	if (strncmp(buffer, kRunCmd, strlen(kRunCmd)) == 0)
+	{
+		Do();
+	}
+	else
+	{
+		std::cout << "Unknown command " << buffer;
+	}
+}
+
 
 int main(int argc, char** argv)
 {
 
 	rl_attempted_completion_function = CommandNameCompletion;
-	Do();
 
-
-	char* buf;
-	while ((buf = readline("> ")) != nullptr) 
+	char* buffer;
+	while ((buffer = readline("> ")) != nullptr) 
 	{
-		if (strlen(buf) > 0)
+		if (strlen(buffer) > 0)
 		{
-			add_history(buf);
-			printf("executing %s\n", buf);
+			add_history(buffer);
+			ExecuteCommand(buffer);
 		}
 
-		free(buf);
+		free(buffer);
 	}
 
 	return 0;
