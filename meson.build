@@ -2,6 +2,8 @@ project('space_tycoon_terminal', 'cpp')
 src = ['src/Main.cpp']
 
 compiler = meson.get_compiler('cpp')
+
+readline_inc = include_directories('C:\Program Files (x86)\GnuWin32\include')
 readline_dep = compiler.find_library('readline', required: false)
 if not readline_dep.found()
 	message('Trying GnuWin32 directory C:\Program Files (x86)\GnuWin32\lib')
@@ -18,5 +20,5 @@ endif
 
 space_tycoon_model_prj = subproject('space_tycoon_model')
 
-executable('space_tycoon', src, install : true,
+executable('space_tycoon', src, install : true, include_directories: readline_inc,
     dependencies : [space_tycoon_model_prj.get_variable('space_tycoon_model_dep'), readline_dep, easyloggingpp_dep])
