@@ -1,3 +1,6 @@
 [submodule "subprojects/space_tycoon_model"]
 	path = subprojects/space_tycoon_model
 	url = https://github.com/barsnadcat/space_tycoon_model.git
+[submodule "subprojects/cpp-linenoise"]
+	path = subprojects/cpp-linenoise
+	url = https://github.com/yhirose/cpp-linenoise.git

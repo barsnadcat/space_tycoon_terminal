@@ -4,47 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include <linenoise.hpp>
 #include <iostream>
 #include <easylogging++.h>
 
 INITIALIZE_EASYLOGGINGPP
 
 const char* kRunCommand = "run";
-const char* kCommands[] = 
+const char* kCommands[] =
 {
 	kRunCommand,
 	nullptr
 };
-
-char* CommandNameGenerator(const char* text, int state)
-{
-	static int listIndex, len;
-	const char* name;
-
-	if (!state) 
-	{
-		listIndex = 0;
-		len = strlen(text);
-	}
-
-	while ((name = kCommands[listIndex++]))
-	{
-		if (strncmp(name, text, len) == 0) 
-		{
-			return strdup(name);
-		}
-	}
-
-	return nullptr;
-}
-
-char** CommandNameCompletion(const char* text, int start, int end)
-{
-	rl_attempted_completion_over = 1; // Disable fallback to file name auto complete
-	return rl_completion_matches(text, CommandNameGenerator);
-}
 
 void ExecuteRunCommand(const char* buffer)
 {
@@ -76,18 +47,27 @@ int main(int argc, char** argv)
 {
 	START_EASYLOGGINGPP(argc, argv);
 
-	rl_attempted_completion_function = CommandNameCompletion;
-
-	char* buffer;
-	while ((buffer = readline("> ")) != nullptr) 
+	// Setup completion words every time when a user types
+	auto completionCallBack = [](const char* editBuffer, std::vector<std::string>& completions)
 	{
-		if (strlen(buffer) > 0)
+		int listIndex = 0;
+		int len = strlen(editBuffer);
+		const char* name;
+		while ((name = kCommands[listIndex++]))
 		{
-			add_history(buffer);
-			ExecuteCommand(buffer);
+			if (strncmp(name, editBuffer, len) == 0)
+			{
+				completions.push_back(name);
+			}
 		}
+	};
+	linenoise::SetCompletionCallback(completionCallBack);
 
-		free(buffer);
+	std::string line;
+	while (!linenoise::Readline("> ", line))
+	{
+		linenoise::AddHistory(line.c_str());
+		ExecuteCommand(line.c_str());
 	}
 
 	return 0;
