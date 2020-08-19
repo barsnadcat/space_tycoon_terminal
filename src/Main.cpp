@@ -1,5 +1,4 @@
-#include <SpaceTycoonModel.h>
-
+#include <Game.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,63 +10,77 @@
 INITIALIZE_EASYLOGGINGPP
 
 const char* kRunCommand = "run";
+const char* kResetCommand = "reset";
 const char* kCommands[] =
 {
 	kRunCommand,
+	kResetCommand,
 	nullptr
 };
 
-void ExecuteRunCommand(const char* buffer)
+void ExecuteRunCommand(Game& game, const char* buffer)
 {
 	int param = 0;
 	if (sscanf(buffer, "%*s %d", &param) < 1)
 	{
-		LOG(ERROR) << "Failed to parse parameters of run command";
+		LOG(WARNING) << "Failed to parse parameters of run command";
 	}
 	else
 	{
-		Do(param);
+		game.Run(param);
 	}
 }
 
-void ExecuteCommand(const char* buffer)
+void ExecuteCommand(Game& game, const char* buffer)
 {
 	if (strncmp(buffer, kRunCommand, strlen(kRunCommand)) == 0)
 	{
-		ExecuteRunCommand(buffer);
+		ExecuteRunCommand(game, buffer);
+		return;
 	}
-	else
+	if (strncmp(buffer, kResetCommand, strlen(kResetCommand)) == 0)
 	{
-		LOG(ERROR) << "Unknown command";
+		game.Reset();
+		return;
 	}
-}
 
+	LOG(WARNING) << "Unknown command";
+}
 
 int main(int argc, char** argv)
 {
 	START_EASYLOGGINGPP(argc, argv);
+	el::Configurations defaultConf;
+	defaultConf.setToDefault();   // Values are always std::string
+	defaultConf.set(el::Level::Global,
+	                el::ConfigurationType::Format, "%msg");
+	defaultConf.set(el::Level::Warning,
+	                el::ConfigurationType::Format, "?: %msg");
+	el::Loggers::reconfigureLogger("default", defaultConf);
 
-	// Setup completion words every time when a user types
+	Game game;
+
+    // Setup completion words every time when a user types
 	auto completionCallBack = [](const char* editBuffer, std::vector<std::string>& completions)
-	{
-		int listIndex = 0;
-		int len = strlen(editBuffer);
-		const char* name;
-		while ((name = kCommands[listIndex++]))
-		{
-			if (strncmp(name, editBuffer, len) == 0)
-			{
-				completions.push_back(name);
-			}
-		}
-	};
+							  {
+								  int listIndex = 0;
+								  int len = strlen(editBuffer);
+								  const char* name;
+								  while ((name = kCommands[listIndex++]))
+								  {
+									  if (strncmp(name, editBuffer, len) == 0)
+									  {
+										  completions.push_back(name);
+									  }
+								  }
+							  };
 	linenoise::SetCompletionCallback(completionCallBack);
 
 	std::string line;
 	while (!linenoise::Readline("> ", line))
 	{
 		linenoise::AddHistory(line.c_str());
-		ExecuteCommand(line.c_str());
+		ExecuteCommand(game, line.c_str());
 	}
 
 	return 0;

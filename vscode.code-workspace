@@ -10,10 +10,10 @@
 				"name": "Launch",
 				"type": "cppvsdbg",
 				"request": "launch",
-				"program": "${workspaceFolder}/debug/test_runner.exe",
+				"program": "${workspaceFolder}/debug/space_tycoon.exe",
 				"cwd": "${workspaceFolder}/debug",
 				"stopAtEntry": false,
-				"externalConsole": false				
+				"externalConsole": true
 			}
 		],
 		"compounds": []
