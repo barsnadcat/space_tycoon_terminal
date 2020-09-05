@@ -3,20 +3,26 @@
 
 Game::Game()
 {
-    mSpace.reset(new Space());    
+    mSettlement.reset(new Settlement());    
 }
 
 void Game::Run(int n)
 {    
     for (int i = 0; i < n; i++)
     {
-        mSpace->Update(mUpdateContext);
-        LOG(INFO) << "Updated";
+        mUpdateContext.mCurrentTime++;
+        mSettlement->Update(mUpdateContext);
+        Render();
     }
+}
+
+void Game::Render() const
+{
+    LOG(INFO) << mUpdateContext.mCurrentTime << " F:" << mSettlement->GetFoods().size() << " P:" << mSettlement->GetPeople().size();
 }
 
 void Game::Reset()
 {
-    mSpace.reset(new Space());
+    mSettlement.reset(new Settlement());
     LOG(INFO) << "Reset";
 }
