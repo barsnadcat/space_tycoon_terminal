@@ -7,11 +7,20 @@
 	"launch": {
 		"configurations": [
 			{
-				"name": "Launch",
+				"name": "Debug",
 				"type": "cppvsdbg",
 				"request": "launch",
 				"program": "${workspaceFolder}/debug/space_tycoon.exe",
 				"cwd": "${workspaceFolder}/debug",
+				"stopAtEntry": false,
+				"externalConsole": true
+			},
+			{
+				"name": "Release",
+				"type": "cppvsdbg",
+				"request": "launch",
+				"program": "${workspaceFolder}/release/space_tycoon.exe",
+				"cwd": "${workspaceFolder}/release",
 				"stopAtEntry": false,
 				"externalConsole": true
 			}
@@ -40,7 +49,10 @@
 				"options": {
 					"cwd": "${workspaceFolder}/release"
 				},
-				"command": "${workspaceFolder}/vs2017ninja.bat"
+				"command": "${workspaceFolder}/vs2017ninja.bat",
+				"problemMatcher": [
+					"$eslint-compact"
+				]
 			}
 		]
 	},

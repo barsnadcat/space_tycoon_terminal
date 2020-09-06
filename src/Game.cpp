@@ -12,8 +12,8 @@ void Game::Run(int n)
 	{
 		mUpdateContext.mCurrentTime++;
 		mSettlement->Update(mUpdateContext);
-		Render();
 	}
+	Render();
 }
 
 void Game::Render() const
