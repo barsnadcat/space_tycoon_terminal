@@ -1,9 +1,13 @@
 #include <Game.h>
+#include <ObjectiveUtilitiesConfig.h>
+#include <ProductionsConfig.h>
 #include <easylogging++.h>
 
 Game::Game()
 {
-    Reset();
+	mUpdateContext.mObjectiveUtilities = GetObjectiveUtilities();
+	mUpdateContext.mProductions = GetProductions();
+	Reset();
 }
 
 void Game::Run(int n)
@@ -18,12 +22,15 @@ void Game::Run(int n)
 
 void Game::Render() const
 {
-	LOG(INFO) << mUpdateContext.mCurrentTime << " F:" << mSettlement->GetFoods().size() << " P:" << mSettlement->GetPeople().size();
+	LOG(INFO) << mUpdateContext.mCurrentTime
+	          << " Food:" << mSettlement->GetFoods().size()
+	          << " People:" << mSettlement->GetPeople().size()
+	          << " Farm:" << mSettlement->GetFarms().size();
 }
 
 void Game::Reset()
 {
 	mSettlement.reset(new Settlement());
-    mSettlement->AddPerson(std::make_unique<Person>(30000, 10));
+	mSettlement->AddPerson(std::make_shared<Person>(30000, 100, RandomPreferences(mUpdateContext)));
 	LOG(INFO) << "Reset";
 }
