@@ -10,6 +10,6 @@ endif
 space_tycoon_model_prj = subproject('space_tycoon_model')
 
 subdir('src')
-inc = include_directories(['src', 'subprojects/cpp-linenoise'])
+inc = include_directories(['src', 'cpp-linenoise'])
 executable('space_tycoon', src, include_directories: inc, 
     dependencies : [space_tycoon_model_prj.get_variable('space_tycoon_model_dep'), easyloggingpp_dep])
