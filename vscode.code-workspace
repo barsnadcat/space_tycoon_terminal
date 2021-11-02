@@ -37,7 +37,7 @@
 				"options": {
 					"cwd": "${workspaceFolder}/debug"
 				},
-				"command": "${workspaceFolder}/vs2017ninja.bat",
+				"command": "${workspaceFolder}/vs_latest_ninja.bat",
 				"problemMatcher": [
 					"$eslint-compact"
 				]
@@ -49,7 +49,7 @@
 				"options": {
 					"cwd": "${workspaceFolder}/release"
 				},
-				"command": "${workspaceFolder}/vs2017ninja.bat",
+				"command": "${workspaceFolder}/vs_latest_ninja.bat",
 				"problemMatcher": [
 					"$eslint-compact"
 				]
