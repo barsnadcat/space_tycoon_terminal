@@ -10,7 +10,7 @@ public:
     Game();
     void Run(int n);
     void Render() const;
-    void Reset();
+    void Reset(int n);
 private:
     UpdateContext mUpdateContext;
     std::unique_ptr<Settlement> mSettlement;

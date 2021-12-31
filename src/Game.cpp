@@ -1,4 +1,5 @@
 #include <Game.h>
+#include <Land.h>
 #include <ObjectiveUtilitiesConfig.h>
 #include <ProductionsConfig.h>
 #include <easylogging++.h>
@@ -7,7 +8,7 @@ Game::Game()
 {
 	mUpdateContext.mObjectiveUtilities = GetObjectiveUtilities();
 	mUpdateContext.mProductions = GetProductions();
-	Reset();
+	Reset(100);
 }
 
 void Game::Run(int n)
@@ -22,15 +23,21 @@ void Game::Run(int n)
 
 void Game::Render() const
 {
-	LOG(INFO) << mUpdateContext.mCurrentTime
-	          << " Food:" << mSettlement->GetFoods().size()
-	          << " People:" << mSettlement->GetPeople().size()
-	          << " Farm:" << mSettlement->GetFarms().size();
+	std::stringstream res;
+	for (size_t i = 0; i < mSettlement->GetLands().size(); i++)
+	{
+		Land& l = mSettlement->GetLand(i);
+		res << "|" << i << (l.GetFarm() == nullptr ? "_" : "F")
+		    << ",f:" << l.GetFoods().size()
+		    << ",p:" << l.GetPeople().size();
+	}
+
+	LOG(INFO) << mUpdateContext.mCurrentTime << " " << res.str();
 }
 
-void Game::Reset()
+void Game::Reset(int n)
 {
-	mSettlement.reset(new Settlement());
-	mSettlement->AddPerson(std::make_shared<Person>(30000, 100, RandomPreferences(mUpdateContext)));
+	mSettlement.reset(new Settlement(n));
+	new Person(&(mSettlement->GetLand(0)), 30000, 100, RandomPreferences(mUpdateContext));
 	LOG(INFO) << "Reset";
 }

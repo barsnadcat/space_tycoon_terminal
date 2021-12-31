@@ -31,6 +31,19 @@ void ExecuteRunCommand(Game& game, const char* buffer)
 	}
 }
 
+void ExecuteResetCommand(Game& game, const char* buffer)
+{
+	int param = 0;
+	if (sscanf(buffer, "%*s %d", &param) < 1)
+	{
+		LOG(WARNING) << "Failed to parse parameters of run command";
+	}
+	else
+	{
+		game.Reset(param);
+	}
+}
+
 void ExecuteCommand(Game& game, const char* buffer)
 {
 	if (strncmp(buffer, kRunCommand, strlen(kRunCommand)) == 0)
@@ -40,7 +53,7 @@ void ExecuteCommand(Game& game, const char* buffer)
 	}
 	if (strncmp(buffer, kResetCommand, strlen(kResetCommand)) == 0)
 	{
-		game.Reset();
+		ExecuteResetCommand(game, buffer);
 		return;
 	}
 
