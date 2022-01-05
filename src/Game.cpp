@@ -1,5 +1,7 @@
 #include <Game.h>
 #include <Land.h>
+#include <Food.h>
+#include <Farm.h>
 #include <ObjectiveUtilitiesConfig.h>
 #include <ProductionsConfig.h>
 #include <easylogging++.h>
@@ -27,8 +29,14 @@ void Game::Render() const
 	for (size_t i = 0; i < mSettlement->GetLands().size(); i++)
 	{
 		Land& l = mSettlement->GetLand(i);
-		res << "|" << i << (l.GetFarm() == nullptr ? "_" : "F")
-		    << ",f:" << l.GetFoods().size()
+		int32_t of = 0;
+		int32_t uf = 0;
+		for(auto* p: l.GetFoods())
+		{
+			p->GetPerson() ? of++ : uf++;
+		}
+		res << "|" << (l.GetFarm() == nullptr ? "_" : l.GetFarm()->GetPerson() == nullptr ? "f" : "F")
+		    << ",f:" << of << "-" << uf
 		    << ",p:" << l.GetPeople().size();
 	}
 
