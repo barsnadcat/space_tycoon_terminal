@@ -12,6 +12,9 @@ public:
     void Render() const;
     void Reset(int n);
 private:
+    void RenderLand(Land&l, std::stringstream& res) const;
+    void RenderPerson(Person* p, std::stringstream& res) const;
+
     UpdateContext mUpdateContext;
     std::unique_ptr<Settlement> mSettlement;
 };
