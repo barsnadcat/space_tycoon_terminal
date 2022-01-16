@@ -1,6 +1,7 @@
 #Meson
 debug
 release
+debugoptimized
 subprojects/easyloggingpp
 subprojects/googletest-release-1.10.0
 subprojects/packagecache

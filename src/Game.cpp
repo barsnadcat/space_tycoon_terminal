@@ -1,4 +1,7 @@
 #include <Game.h>
+
+#include <chrono>
+
 #include <Land.h>
 #include <Food.h>
 #include <Farm.h>
@@ -15,11 +18,14 @@ Game::Game()
 
 void Game::Run(int n)
 {
+	auto start = std::chrono::high_resolution_clock::now();
 	for (int i = 0; i < n; i++)
 	{
 		mUpdateContext.mCurrentTime++;
 		mSettlement->Update(mUpdateContext);
 	}
+	auto stop = std::chrono::high_resolution_clock::now();
+	LOG(INFO) << (std::chrono::duration_cast<std::chrono::milliseconds>(stop - start)).count() << " millisecons";
 	Render();
 }
 
